@@ -2,15 +2,15 @@
 
 ## Configuration on Rabbit
 
-Following virtual hosts --
+#### virtual hosts --
 
 ![Virtual Hosts](./images/vHosts.png)
 
-Following users --
+#### rabbit users --
 
 ![Users](./images/users.png)
 
-And following queue config --
+#### queues --
 
 ![Queues](./images/queues.png)
 
