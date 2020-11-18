@@ -15,6 +15,7 @@
 ![Queues](./images/queues.png)
 
 ## On Spring boot
+### Publisher
 Setting up a `SimpleRoutingConnectionFactory` as following --
 
 ```java
@@ -57,6 +58,40 @@ Now, while publishing, we need to mention which virtual host we want to publish 
 ```java
 SimpleResourceHolder.bind(rabbitTemplate.getConnectionFactory(), "<VHOST_NAME>");
 rabbitTemplate.convertAndSend("<EXCHANGE>", "<ROUTING_KEY>", "<PAYLOAD>");
+```
+
+### Consumer
+
+Individual listeners needed to be setup for each individual V_Hosts
+
+```java
+@Bean("dmmSignListener")
+    MessageListenerAdapter dmmListenerAdapter(ConsumerService consumerService) {
+        return new MessageListenerAdapter(consumerService, "dmmReceiveSignMessage");
+    }
+    @Bean("pgaSignListener")
+    MessageListenerAdapter pgaListenerAdapter(ConsumerService consumerService) {
+        return new MessageListenerAdapter(consumerService, "pgaReceiveSignMessage");
+    }
+
+    @Bean("dmmSignListenerContainer")
+    public SimpleMessageListenerContainer dmmSignListenerContainer(@Qualifier("dmmSignListener") MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(dmm_vhost_ConnectionFactory());
+        container.setQueueNames("sv_sign");
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
+
+    @Bean("pgaSignListenerContainer")
+    public SimpleMessageListenerContainer pgaSignListenerContainer(@Qualifier("pgaSignListener") MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(pga_vhost_ConnectionFactory());
+        container.setQueueNames("sv_sign");
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
+
 ```
 ### How to run this project
 

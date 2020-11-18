@@ -16,7 +16,7 @@ public class MockSignProcessor {
 
     public void processSign(MessageEvent event) {
         log.info("Processing from - " + event.getClientId());
-        ResponseMessage responseMessage = null;
+        ResponseMessage responseMessage;
         if (event.getClientId().contains("dmm")) {
             responseMessage = ResponseMessage.newDMMResponseMessage(event.getMessage() + "_processed");
         } else {
