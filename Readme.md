@@ -1,5 +1,5 @@
 # RabbitMQ multiple virtual host spring boot
-![Maven Package](https://github.com/soumencemk/rabbitmq_multiple_vhost_springBoot/workflows/Maven%20Package/badge.svg)
+![Java CI with Maven](https://github.com/soumencemk/rabbitmq_multiple_vhost_springBoot/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 ## Configuration on Rabbit
 
