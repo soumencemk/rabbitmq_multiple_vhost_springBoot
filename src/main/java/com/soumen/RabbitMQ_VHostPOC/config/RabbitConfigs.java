@@ -1,9 +1,14 @@
 package com.soumen.RabbitMQ_VHostPOC.config;
 
+import com.soumen.RabbitMQ_VHostPOC.service.ConsumerService;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.SimpleRoutingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,4 +53,30 @@ public class RabbitConfigs {
         return connectionFactory;
     }
 
+    @Bean("dmmSignListener")
+    MessageListenerAdapter dmmListenerAdapter(ConsumerService consumerService) {
+        return new MessageListenerAdapter(consumerService, "dmmReceiveSignMessage");
+    }
+    @Bean("pgaSignListener")
+    MessageListenerAdapter pgaListenerAdapter(ConsumerService consumerService) {
+        return new MessageListenerAdapter(consumerService, "pgaReceiveSignMessage");
+    }
+
+    @Bean("dmmSignListenerContainer")
+    public SimpleMessageListenerContainer dmmSignListenerContainer(@Qualifier("dmmSignListener") MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(dmm_vhost_ConnectionFactory());
+        container.setQueueNames("sv_sign");
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
+
+    @Bean("pgaSignListenerContainer")
+    public SimpleMessageListenerContainer pgaSignListenerContainer(@Qualifier("pgaSignListener") MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(pga_vhost_ConnectionFactory());
+        container.setQueueNames("sv_sign");
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
 }

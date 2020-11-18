@@ -18,6 +18,7 @@ public class PublisherServiceImpl implements PublisherService {
     public void publish(MessageEvent event) {
         try {
             SimpleResourceHolder.bind(rabbitTemplate.getConnectionFactory(), event.getClientId());
+            log.info("PUBLISHING : " + event.toString());
             rabbitTemplate.convertAndSend(event.getExchange(), event.getRoutingKey(), event.getMessage());
         } catch (Exception e) {
             log.error("Exception ", e);

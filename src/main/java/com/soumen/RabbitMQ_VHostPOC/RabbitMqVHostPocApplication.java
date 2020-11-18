@@ -24,11 +24,9 @@ public class RabbitMqVHostPocApplication implements CommandLineRunner {
 
     @EventListener(ApplicationStartedEvent.class)
     public void onStartup() {
-        log.info("Publishing to DMM Sign Queue");
         SignMessage dmm_sign_1 = SignMessage.newDMMSignMessage("dmm_sign_1");
         publisher.publish(dmm_sign_1);
 
-        log.info("Publishing to PGA Sign Queue");
         SignMessage pga_sign_1 = SignMessage.newPGASignMessage("pga_sign_1");
         publisher.publish(pga_sign_1);
     }

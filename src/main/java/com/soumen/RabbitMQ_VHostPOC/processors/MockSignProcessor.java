@@ -15,7 +15,7 @@ public class MockSignProcessor {
     private final PublisherService publisherService;
 
     public void processSign(MessageEvent event) {
-        log.info("Publishing to ResponseQueue of - " + event.getClientId());
+        log.info("Processing from - " + event.getClientId());
         ResponseMessage responseMessage = null;
         if (event.getClientId().contains("dmm")) {
             responseMessage = ResponseMessage.newDMMResponseMessage(event.getMessage() + "_processed");
